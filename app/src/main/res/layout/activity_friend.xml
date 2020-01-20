@@ -21,33 +21,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintVertical_bias="0.35" />
 
     <Button
         android:id="@+id/mvsubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/black"
+        android:fontFamily="@font/montserrat"
         android:text="submit"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.45" />
 
     <TextView
         android:id="@+id/mvGuess"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat"
+        android:scrollHorizontally="true"
         android:textSize="30sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.25" />
 
     <EditText
         android:id="@+id/charac"
@@ -57,12 +60,13 @@
         android:hint="Enter character"
         android:inputType="textPersonName"
         android:maxLength="1"
+        android:textColor="@android:color/white"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintVertical_bias="0.35" />
 
     <Button
         android:id="@+id/charsub"
@@ -76,7 +80,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.45" />
 
     <TextView
         android:id="@+id/status"
@@ -86,6 +90,32 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mvsubmit"
-        app:layout_constraintVertical_bias="0.060000002" />
+        app:layout_constraintTop_toTopOf="@+id/mvGuess"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <TextView
+        android:id="@+id/cntlyf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lives left: "
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1"
+        android:fontFamily="@font/aclonica"/>
+
+    <TextView
+        android:id="@+id/letters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Incorrectly used letters: "
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.2"
+        android:fontFamily="@font/aclonica"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

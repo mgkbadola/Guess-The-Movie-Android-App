@@ -19,19 +19,30 @@ class Friend : AppCompatActivity() {
                 Toast.makeText(this,"Name field is blank!",Toast.LENGTH_SHORT).show()
             }
             else{
-                mvnm_et.visibility = View.INVISIBLE
-                mvsubmit.visibility = View.INVISIBLE
+                mvnm_et.visibility = View.GONE
+                mvsubmit.visibility = View.GONE
+
                 movie = mvnm_et.text.toString()
+                mvnm_et.text.clear()
+                var len = 0
                 for(char in movie){
                     if(char == ' ')
                         mvGuess.append("/ ")
-                    else
+                    else{
                         mvGuess.append("_ ")
+                        len++
+                    }
                 }
-                lives = movie.length/2 + 1
+                lives = len/2 + 1
+                if(lives > 9)
+                    lives=9
+                cntlyf.append(" $lives")
+
                 mvGuess.visibility = View.VISIBLE
                 charac.visibility = View.VISIBLE
                 charsub.visibility = View.VISIBLE
+                letters.visibility = View.VISIBLE
+                cntlyf.visibility = View.VISIBLE
             }
         }
         charsub.setOnClickListener {
@@ -40,14 +51,21 @@ class Friend : AppCompatActivity() {
                 charac.text.clear()
                 if (!movie.contains(char.toUpperCase()) && !movie.contains(char.toLowerCase())) {
                     lives--
+                    letters.append(char)
                     if (lives == 0) {
                         Toast.makeText(this, "Game Over!", Toast.LENGTH_SHORT).show()
                         mvGuess.text = movie
-                        charac.visibility=View.INVISIBLE
-                        charsub.visibility=View.INVISIBLE
-                        status.text = "Movie was NOT guessed!"
-                    } else
-                        Toast.makeText(this, "Lives remaining: $lives", Toast.LENGTH_SHORT).show()
+
+                        charac.visibility = View.GONE
+                        cntlyf.visibility = View.GONE
+                        charsub.visibility = View.GONE
+                        letters.visibility = View.GONE
+
+                        status.text = "SORRY! The movie was NOT guessed!"
+                    }
+                    else{
+                        cntlyf.text="Lives remaining: $lives"
+                    }
 
                 }
                 else{
@@ -61,8 +79,7 @@ class Friend : AppCompatActivity() {
                         mvGuess.text=movie
                         charac.visibility=View.INVISIBLE
                         charsub.visibility=View.INVISIBLE
-                        Toast.makeText(this, "CONGRATS! YOU WON!", Toast.LENGTH_SHORT).show()
-                        status.text = "Movie was guessed!"
+                        status.text = "CONGRATS! The movie was guessed!"
                     }
 
                 }
