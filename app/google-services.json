@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "202273510421",
+    "firebase_url": "https://guess-the-movie-c67ac.firebaseio.com",
+    "project_id": "guess-the-movie-c67ac",
+    "storage_bucket": "guess-the-movie-c67ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202273510421:android:0fdbd7f428fe68c46f6a1c",
+        "android_client_info": {
+          "package_name": "com.mgkbadola.guessthemovie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "202273510421-nj3n53anoor89currbmf63qn2nqbm64s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mgkbadola.guessthemovie",
+            "certificate_hash": "77f61ccc3fd1e416aa81ba78ba1c7683dd344315"
+          }
+        },
+        {
+          "client_id": "202273510421-mkocr336933kvi3ah0p0kmpiknbgcsan.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxh5hnEu5jgtdmNpbD5-aQa3P5zrdY2ZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "202273510421-mkocr336933kvi3ah0p0kmpiknbgcsan.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

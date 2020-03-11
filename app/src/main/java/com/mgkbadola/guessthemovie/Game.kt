@@ -4,27 +4,33 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.game.*
 import kotlin.random.Random
 
 
 class Game : AppCompatActivity() {
-
+    lateinit var ref:DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game)
+
+        ref = FirebaseDatabase.getInstance().reference
+
         var movie = ""
         var lives = 0
-        val mv = Movie(arrayListOf("Andaz Apna Apna", "Housefull", "Agent Vinod", "Qayamat Se Qayamat Tak"))
+        //val mv = Movie(arrayListOf("Andaz Apna Apna", "Housefull", "Agent Vinod", "Qayamat Se Qayamat Tak"))
         val extras = intent.extras
         if(extras!!["game_type"]==1) {
             mvsubmit.setOnClickListener {
-                if (mvnm_et.text.toString().trim().isEmpty()) {
+                if (mvnm_et.text.toString().trim().isEmpty()||cat_et.text.toString().trim().isEmpty()) {
                     Toast.makeText(this, "Name field is blank!", Toast.LENGTH_SHORT).show()
                 }
                 else {
                     mvnm_et.visibility = View.GONE
+                    cat_et.visibility = View.GONE
                     mvsubmit.visibility = View.GONE
+                    val category = cat_et.text.toString()
                     val t = StringBuilder(mvnm_et.text.toString())
                     t[0]=t[0].toUpperCase()
                     for(i in t.indices){
@@ -32,9 +38,10 @@ class Game : AppCompatActivity() {
                             t[i+1]=t[i+1].toUpperCase()
                     }
                     movie = t.toString()
-                    if(!mv.list.contains(movie))
-                        mv.list.add(movie)
                     mvnm_et.text.clear()
+                    cat_et.text.clear()
+
+                    saveMovietoDatabase(movie,category)
 
                     var len = 0
                     for (char in movie) {
@@ -46,8 +53,8 @@ class Game : AppCompatActivity() {
                         }
                     }
                     lives = len / 2 + 1
-                    if (lives > 9)
-                        lives = 9
+                    if (lives > 7)
+                        lives = 7
                     cntlyf.append(" $lives")
 
                     mvGuess.visibility = View.VISIBLE
@@ -58,11 +65,25 @@ class Game : AppCompatActivity() {
                 }
             }
         }
-        else if(extras["game_type"]==2){
+        /*else if(extras["game_type"]==2){
+            var str = ""
+            var count=0
             mvnm_et.visibility = View.INVISIBLE
+            cat_et.visibility = View.INVISIBLE
             mvsubmit.visibility = View.INVISIBLE
-            val i = Random.nextInt(0,mv.list.size)
-            val str = mv.list[i]
+            //need to fix this
+            ref.addValueEventListener(object: ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists()) {
+                        for (h in p0.children)
+                            ++count
+                    }
+                }
+            })
             movie = str
 
             var len = 0
@@ -75,8 +96,8 @@ class Game : AppCompatActivity() {
                 }
             }
             lives = len / 2 + 1
-            if (lives > 9)
-                lives = 9
+            if (lives > 7)
+                lives = 7
             cntlyf.append(" $lives")
 
             mvGuess.visibility = View.VISIBLE
@@ -84,7 +105,7 @@ class Game : AppCompatActivity() {
             charsub.visibility = View.VISIBLE
             letters.visibility = View.VISIBLE
             cntlyf.visibility = View.VISIBLE
-        }
+        }*/
         charsub.setOnClickListener {
             if(!charac.text.trim().isEmpty()) {
                 val char = charac.text.toString()
@@ -124,6 +145,24 @@ class Game : AppCompatActivity() {
 
                 }
             }
+        }
+    }
+    private fun saveMovietoDatabase(mvname: String, category: String){
+        var flag=1
+        ref.orderByChild("name").equalTo(mvname).addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDataChange(p0: DataSnapshot){
+                if(p0.exists()) {
+                        flag=0
+                    }
+            }
+        })
+        if(flag!=0){
+            val movie=Movie(mvname,category)
+            ref.child(mvname).setValue(movie)
         }
     }
 }
