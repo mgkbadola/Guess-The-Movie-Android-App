@@ -1,6 +1,6 @@
 package com.mgkbadola.guessthemovie
 
- class Movie(val name: String, val cat: String){
+ data class Movie(val name: String, val category: String){
     constructor() : this("",""){
 
     }
