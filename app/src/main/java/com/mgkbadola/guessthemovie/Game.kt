@@ -3,6 +3,8 @@ package com.mgkbadola.guessthemovie
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FieldValue
@@ -11,26 +13,38 @@ import kotlinx.android.synthetic.main.game.*
 import kotlin.random.Random
 
 
-class Game : AppCompatActivity() {
-        private lateinit var db: FirebaseFirestore
+class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+    private lateinit var db: FirebaseFirestore
         override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game)
         db = FirebaseFirestore.getInstance()
         var movie = ""
+        var category = ""
         var lives = 0
         val extras = intent.extras
         if (extras!!["game_type"] == 1) {
+            cat_et.setOnItemSelectedListener(this)
+            ArrayAdapter.createFromResource(
+                this,
+                R.array.category,
+                android.R.layout.simple_spinner_item
+            ).also { adapter ->
+                // Specify the layout to use when the list of choices appears
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                // Apply the adapter to the spinner
+                cat_et.adapter = adapter
+            }
+
             mvsubmit.setOnClickListener {
-                if (mvnm_et.text.toString().trim().isEmpty() || cat_et.text.toString().trim()
-                        .isEmpty()
-                ) {
+                if (mvnm_et.text.toString().trim().isEmpty()) {
                     Toast.makeText(this, "Name field is blank!", Toast.LENGTH_SHORT).show()
-                } else {
+                }
+                else {
                     mvnm_et.visibility = View.GONE
                     cat_et.visibility = View.GONE
                     mvsubmit.visibility = View.GONE
-                    val category = cat_et.text.toString()
+
                     val t = StringBuilder(mvnm_et.text.toString())
                     t[0] = t[0].toUpperCase()
                     for (i in t.indices) {
@@ -38,9 +52,9 @@ class Game : AppCompatActivity() {
                             t[i + 1] = t[i + 1].toUpperCase()
                     }
                     movie = t.toString()
+                    category = cat_et.selectedItem.toString()
                     mvnm_et.text.clear()
-                    cat_et.text.clear()
-
+                    cat.text = category
                     saveMovietoDatabase(movie, category)
 
                     var len = 0
@@ -57,6 +71,7 @@ class Game : AppCompatActivity() {
                         lives = 7
                     cntlyf.append(" $lives")
 
+                    cat.visibility = View.VISIBLE
                     mvGuess.visibility = View.VISIBLE
                     charac.visibility = View.VISIBLE
                     charsub.visibility = View.VISIBLE
@@ -153,5 +168,13 @@ class Game : AppCompatActivity() {
                     update("counter",FieldValue.increment(1))
                 }
             }
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        parent!!.getItemAtPosition(position)
     }
 }
