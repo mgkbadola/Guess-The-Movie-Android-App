@@ -2,11 +2,15 @@ package com.mgkbadola.guessthemovie
 
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.game.*
@@ -36,14 +40,22 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 cat_et.adapter = adapter
             }
 
+            //done button = submit
+            mvnm_et.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+                if (event != null && event.keyCode === KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
+                    mvsubmit.performClick()
+                }
+                false
+            })
+
             mvsubmit.setOnClickListener {
                 if (mvnm_et.text.toString().trim().isEmpty()) {
                     Toast.makeText(this, "Name field is blank!", Toast.LENGTH_SHORT).show()
                 }
                 else {
-                    mvnm_et.visibility = View.GONE
-                    cat_et.visibility = View.GONE
-                    mvsubmit.visibility = View.GONE
+                    mvnm_et.visibility = View.INVISIBLE; mvnm_et.isFocusable=false
+                    cat_et.visibility = View.INVISIBLE; cat_et.isFocusable=false
+                    mvsubmit.visibility = View.INVISIBLE; mvsubmit.isFocusable=false
 
                     val t = StringBuilder(mvnm_et.text.toString())
                     t[0] = t[0].toUpperCase()
@@ -82,9 +94,9 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
         else if (extras["game_type"] == 2) {
             var count:Int
-            mvnm_et.visibility = View.INVISIBLE
-            cat_et.visibility = View.INVISIBLE
-            mvsubmit.visibility = View.INVISIBLE
+            mvnm_et.visibility = View.INVISIBLE; mvnm_et.isFocusable=false
+            cat_et.visibility = View.INVISIBLE; cat_et.isFocusable=false
+            mvsubmit.visibility = View.INVISIBLE; mvsubmit.isFocusable=false
             //slows down
             db.collection("count").document("counter").get().addOnSuccessListener { document ->
                 if (document.exists()) {
@@ -94,6 +106,8 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     Log.i("value of count","$count")
                     db.collection("movies").get().addOnSuccessListener { documents ->
                         movie = documents.documents[count]["name"] as String
+                        category = documents.documents[count]["category"] as String
+                        cat.text = category
                         var len = 0
                         for (char in movie) {
                             if (char == ' ')
@@ -112,11 +126,20 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         charsub.visibility = View.VISIBLE
                         letters.visibility = View.VISIBLE
                         cntlyf.visibility = View.VISIBLE
+                        cat.visibility = View.VISIBLE
                     }
 
                 }
             }
         }
+        //done button=submit
+        charac.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+            if (event != null && event.keyCode === KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
+                charsub.performClick()
+            }
+            false
+        })
+
         charsub.setOnClickListener {
             if (!charac.text.trim().isEmpty()) {
                 val char = charac.text.toString()
@@ -132,6 +155,7 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         cntlyf.visibility = View.GONE
                         charsub.visibility = View.GONE
                         letters.visibility = View.GONE
+                        cat.visibility = View.GONE
 
                         status.text = "SORRY! The movie was NOT guessed!"
                     } else {
@@ -149,6 +173,7 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         mvGuess.text = movie
                         charac.visibility = View.INVISIBLE
                         charsub.visibility = View.INVISIBLE
+                        cat.visibility = View.INVISIBLE
                         status.text = "CONGRATS! The movie was guessed!"
                     }
 

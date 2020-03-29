@@ -19,33 +19,54 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.16" />
+        app:layout_constraintVertical_bias="0.1" />
 
-    <TextView
-        android:id="@+id/frnd"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat"
-        android:text="Play with a friend!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="0.84"
-        android:gravity="center"
-        android:textSize="20sp"/>
-    <TextView
+        app:layout_constraintVertical_bias="0.25"
+        app:srcCompat="@drawable/guessthemovie" />
+
+    <Button
+        android:id="@+id/frnd"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@drawable/custom_button"
+        android:backgroundTint="#FFA3A3"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center|top"
+        android:text="Play with a friend!"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
         android:id="@+id/comp"
+        android:padding="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat"
         android:text="Play with the computer!"
         android:textColor="@android:color/white"
+        android:background="@drawable/custom_button"
+        android:backgroundTint="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frnd"
-        app:layout_constraintVertical_bias="0.60"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
         android:gravity="center"
         android:textSize="20sp"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
