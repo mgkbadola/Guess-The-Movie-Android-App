@@ -1,16 +1,17 @@
 package com.mgkbadola.guessthemovie
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.game.*
@@ -19,10 +20,12 @@ import kotlin.random.Random
 
 class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var db: FirebaseFirestore
+    private lateinit var imm: InputMethodManager
         override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game)
         db = FirebaseFirestore.getInstance()
+        imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         var movie = ""
         var category = ""
         var lives = 0
@@ -40,6 +43,8 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 cat_et.adapter = adapter
             }
 
+            mvnm_et.requestFocus()
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
             //done button = submit
             mvnm_et.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
                 if (event != null && event.keyCode === KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
@@ -53,9 +58,9 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     Toast.makeText(this, "Name field is blank!", Toast.LENGTH_SHORT).show()
                 }
                 else {
-                    mvnm_et.visibility = View.INVISIBLE; mvnm_et.isFocusable=false
-                    cat_et.visibility = View.INVISIBLE; cat_et.isFocusable=false
-                    mvsubmit.visibility = View.INVISIBLE; mvsubmit.isFocusable=false
+                    mvnm_et.visibility = View.INVISIBLE; mvnm_et.clearFocus()
+                    cat_et.visibility = View.INVISIBLE;
+                    mvsubmit.visibility = View.INVISIBLE;
 
                     val t = StringBuilder(mvnm_et.text.toString())
                     t[0] = t[0].toUpperCase()
@@ -89,14 +94,15 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     charsub.visibility = View.VISIBLE
                     letters.visibility = View.VISIBLE
                     cntlyf.visibility = View.VISIBLE
+                    charac.requestFocus()
                 }
             }
         }
         else if (extras["game_type"] == 2) {
             var count:Int
-            mvnm_et.visibility = View.INVISIBLE; mvnm_et.isFocusable=false
-            cat_et.visibility = View.INVISIBLE; cat_et.isFocusable=false
-            mvsubmit.visibility = View.INVISIBLE; mvsubmit.isFocusable=false
+            mvnm_et.visibility = View.INVISIBLE; mvnm_et.clearFocus()
+            cat_et.visibility = View.INVISIBLE;
+            mvsubmit.visibility = View.INVISIBLE;
             //slows down
             db.collection("count").document("counter").get().addOnSuccessListener { document ->
                 if (document.exists()) {
@@ -127,11 +133,13 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         letters.visibility = View.VISIBLE
                         cntlyf.visibility = View.VISIBLE
                         cat.visibility = View.VISIBLE
+                        charac.requestFocus()
                     }
 
                 }
             }
         }
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
         //done button=submit
         charac.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (event != null && event.keyCode === KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
@@ -158,6 +166,7 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                         cat.visibility = View.GONE
 
                         status.text = "SORRY! The movie was NOT guessed!"
+                        imm.toggleSoftInput(InputMethodManager.RESULT_HIDDEN, 0)
                     } else {
                         cntlyf.text = "Lives remaining: $lives"
                     }
@@ -179,6 +188,7 @@ class Game : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                 }
             }
+            charac.requestFocus()
         }
     }
 
